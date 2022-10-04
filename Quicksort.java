@@ -1,6 +1,6 @@
 // Quicksort with Insertion Sort
 // COSC 330 - Algorithms
-// Ashley Robbins 
+// Ashley Robbins & Trong Bao
 // Sep 28 2022
 
 import java.util.Random; 
@@ -22,29 +22,34 @@ public class Quicksort {
 
    public static void quicksort(int[] a) {
    
-      int right = a.length-1; 
+      int end = a.length-1; 
    
-      quicksort(a, 0, right); 
+      quicksort(a, 0, end); 
       
    }
    
    private static void quicksort(int[] A, int start, int end) {
    
       if (start < end) {
-         return; 
-       }
+         int mid = partition(A, start, end); 
+         quicksort(A, start, mid-1); 
+         quicksort(A, mid+1, end); 
+      }
       
-      int mid = partition(A, start, end); 
-      quicksort(A, start, mid-1); 
-      quicksort(A, mid+1, end); 
-   
+      //TEST//
+      System.out.print("sorted array arr: "); 
+      for(int i = 0; i < A.length-1; i++) {
+         System.out.print(A[i] + ", "); 
+      }
+      System.out.println(A[A.length-1]); 
+      //END//
    }
    
    private static int partition(int[] A, int start, int end) {
       
-      int pivot = A[end];
+      int pivot = A[A.length-1];
       
-      int i = start - 1; 
+      int i = A[start - 1]; 
       
       for(int j = start; j <= A.length-1; j++) {
          
@@ -76,6 +81,7 @@ public class Quicksort {
    
    }
    
+   //FIXME: I don't implement properly//
    private static void swap(int num1, int num2) {
    
       int temp = num1; 
@@ -99,6 +105,9 @@ public class Quicksort {
       }
       System.out.println(arr[arr.length-1]); 
       //END//
+      
+  
+      quicksort(arr, arr[0], arr[arr.length-1]); 
 
 
    }
