@@ -1,12 +1,12 @@
 // Quicksort with Insertion Sort
 // COSC 330 - Algorithms
-// Ashley Robbins 
+// Ashley Robbins & Trong Bao
 // Sep 28 2022
 
 import java.util.Random; 
 import java.util.Arrays; 
 
-public class Quicksort {
+class Quicksort {
 
    private static Random rand = new Random(); 
    
@@ -20,73 +20,74 @@ public class Quicksort {
    
    }
 
-   public static void quicksort(int[] a) {
+	private static void insertionSort(int a[], int low, int high) {
    
-      int right = a.length-1; 
-   
-      quicksort(a, 0, right); 
-      
-   }
-   
-   private static void quicksort(int[] A, int start, int end) {
-   
-      if (start < end) {
-         return; 
-       }
-      
-      int mid = partition(A, start, end); 
-      quicksort(A, start, mid-1); 
-      quicksort(A, mid+1, end); 
-   
-   }
-   
-   private static int partition(int[] A, int start, int end) {
-      
-      int pivot = A[end];
-      
-      int i = start - 1; 
-      
-      for(int j = start; j <= A.length-1; j++) {
-         
-         if(A[j] <= pivot) {
-            
-            i = i + 1; 
-            //swap(A[i], A[j]); 
-            int temp = A[i]; 
-            A[i] = A[j]; 
-            A[j] = temp; 
-            
-         }
-         
-         if(j == A.length-1) {
-         
-            //swap(A[i+1), pivot); 
-            
-            int temp = A[i+1]; 
-            A[i+1] = pivot; 
-            pivot = temp; 
-         }
-      
-      } 
-      
-   
-   
-      //return 0; 
-      return i + 1; 
-   
-   }
-   
-   private static void swap(int num1, int num2) {
-   
-      int temp = num1; 
-      num1 = num2; 
-      num2 = temp; 
-   
-   }
+		for (int i = low + 1; i <= high; i++) {
+			for (int j = i - 1; j >= low; j--) {
+				if (a[j] > a[j + 1]) {
+					// Swap
+					int temp = a[j];
+					a[j] = a[j + 1];
+					a[j + 1] = temp;
+				}
+				else
+					break;
+			}
+		}
+	}
 
-   public static void main(String[] args) {
-   
-      int size = 10; //this will go in the for loop like our last program
+	private static int partition(int arr[], int low,
+								int high)
+	{
+		int pivot = arr[high];
+		int i = low;
+		int j = low;
+
+		while (i <= high) {
+			if (arr[i] > pivot)
+				i++;
+			else {
+				int temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+				i++;
+				j++;
+			}
+		}
+		return j - 1;
+	}
+
+	public static void quicksort(int arr[], int low,
+									int high)
+	{
+		while (low < high) {
+			// Check if array size on which we will be working is less than 10
+			if (high - low < 10) {
+				insertionSort(arr, low, high);
+				break;
+			}
+			else {
+				int pivot = partition(arr, low, high);
+
+				// We will do recursion on small size
+				// subarray So we can check pivot - low and
+				// pivot - high
+
+				if (pivot - low < pivot - high) {
+					quicksort(arr, low, pivot - 1);
+					low = pivot + 1;
+				}
+				else {
+					quicksort(arr, pivot + 1, high);
+					high = pivot - 1;
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+
+		int size = 10; //this will go in the for loop like our last program
       
       int[] arr = new int[size]; 
       
@@ -100,8 +101,18 @@ public class Quicksort {
       System.out.println(arr[arr.length-1]); 
       //END//
 
+		quicksort(arr, 0, arr.length - 1);
+      
+      //TEST
+      System.out.print("sorted array arr: "); 
+      for(int i = 0; i < arr.length-1; i++) {
+         System.out.print(arr[i] + ", "); 
+      }
+      System.out.println(arr[arr.length-1]); 
+      //END//
 
-   }
-
+	}
 }
+
+
 
