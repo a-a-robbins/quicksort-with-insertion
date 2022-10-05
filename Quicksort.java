@@ -6,7 +6,7 @@
 import java.util.Random; 
 import java.util.Arrays; 
 
-public class Quicksort {
+class Quicksort {
 
    private static Random rand = new Random(); 
    
@@ -19,80 +19,83 @@ public class Quicksort {
       }
    
    }
-
-   public static void quicksort(int[] a) {
    
-      int end = a.length-1; 
+   private void swap(int i, int j) {
    
-      quicksort(a, 0, end); 
+      int temp = i;
+      i = j;
+      j = temp;
       
    }
    
-   private static void quicksort(int[] A, int start, int end) {
-   
-      if (start < end) {
-         int mid = partition(A, start, end); 
-         quicksort(A, start, mid-1); 
-         quicksort(A, mid+1, end); 
-      }
+   public static void quicksort(int[] arr, int cutoff) {
       
-      //TEST//
-      System.out.print("sorted array arr: "); 
-      for(int i = 0; i < A.length-1; i++) {
-         System.out.print(A[i] + ", "); 
-      }
-      System.out.println(A[A.length-1]); 
-      //END//
-   }
-   
-   private static int partition(int[] A, int start, int end) {
+      quicksort(arr, 0, arr.length-1, cutoff); 
       
-      int pivot = A[A.length-1];
-      
-      int i = A[start - 1]; 
-      
-      for(int j = start; j <= A.length-1; j++) {
-         
-         if(A[j] <= pivot) {
-            
-            i = i + 1; 
-            //swap(A[i], A[j]); 
-            int temp = A[i]; 
-            A[i] = A[j]; 
-            A[j] = temp; 
-            
-         }
-         
-         if(j == A.length-1) {
-         
-            //swap(A[i+1), pivot); 
-            
-            int temp = A[i+1]; 
-            A[i+1] = pivot; 
-            pivot = temp; 
-         }
-      
-      } 
-      
-   
-   
-      //return 0; 
-      return i + 1; 
-   
-   }
-   
-   //FIXME: I don't implement properly//
-   private static void swap(int num1, int num2) {
-   
-      int temp = num1; 
-      num1 = num2; 
-      num2 = temp; 
-   
    }
 
-   public static void main(String[] args) {
+   private static void quicksort(int arr[], int low, int high, int cutoff) {
+   		
+            if (arr.length <= cutoff) {
+   				insertionSort(arr, low, high);
+   			}
+            
+   			else {
+   				int pivot = partition(arr, low, high);
    
-      int size = 10; //this will go in the for loop like our last program
+   					quicksort(arr, low, pivot - 1, cutoff);
+   				
+   					quicksort(arr, pivot + 1, high, cutoff);
+   				
+   			}
+   		}
+   	
+   
+
+	private static int partition(int arr[], int low, int high) {
+   
+		int pivot = arr[high];
+		int i = low-1;
+		int j = low;
+
+		while (i <= high) {
+			if (arr[i] > pivot)
+				i++;
+			else {
+				int temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+            //FIXME: Trong, can you figure out why this doesn't work? I copied it from lecture code...
+            //swap(arr[i], arr[j]);
+				i++;
+				j++;
+			}
+		}
+		return i + 1;
+	}
+   
+   	private static void insertionSort(int arr[], int left, int right) {
+   
+		for (int i = left + 1; i <= right; i++) {
+      
+         int key = arr[i]; 
+         int j = i - 1; 
+	
+            while(j >= 0 && arr[j] > key) {
+            
+               arr[j + 1] = arr[j]; 
+               j = j - 1; 
+               
+				}
+            
+            arr[j + 1] = key; 
+			}
+	}
+
+		public static void main(String[] args) {
+
+		int size = 9; //this will go in the for loop like our last program
+      int cutoff = 10; 
       
       int[] arr = new int[size]; 
       
@@ -105,12 +108,19 @@ public class Quicksort {
       }
       System.out.println(arr[arr.length-1]); 
       //END//
+
+		quicksort(arr, cutoff);
       
-  
-      quicksort(arr, arr[0], arr[arr.length-1]); 
+      //TEST
+      System.out.print("sorted array arr: "); 
+      for(int i = 0; i < arr.length-1; i++) {
+         System.out.print(arr[i] + ", "); 
+      }
+      System.out.println(arr[arr.length-1]); 
+      //END//
 
-
-   }
-
+	}
 }
+
+
 
